@@ -6,11 +6,23 @@ import ItemDetailsModal from "../components/ItemDetailsModal";
 import { menuData } from "../data/menuData";
 import "../components/MenuCard.css";
 
-const Menu = ({ onBack }) => {
-  const [activeSection, setActiveSection] = useState("");
+const Menu = ({ onBack, initialCategory }) => {
+  const [activeSection, setActiveSection] = useState(initialCategory || "");
   const [selectedItem, setSelectedItem] = useState(null);
 
   const sectionRefs = useRef({});
+
+  useEffect(() => {
+    if (initialCategory) {
+      const timer = setTimeout(() => {
+        const element = sectionRefs.current[initialCategory];
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [initialCategory]);
 
   // Scroll spy: highlight category button corresponding to active section
   useEffect(() => {
